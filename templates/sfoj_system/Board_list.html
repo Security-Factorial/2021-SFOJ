@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<!-- 상단 꾸미기 -->
+<div class="blue_sec">
+    <div class="container">
+        <div style="font-size:4rem;">
+        <div class="top_info_lead">SECURITY FACTORIAL<br>
+        <span class="top_info_lead">Online Judge System</span>
+    </div>
+    </div>
+</div>
+</div>
+<!-- page content -->
+<div class="board_list_my_box">
+    <div style="padding:2.5rem 2.5rem 0 2.5rem">
+        <div class="board_list_my_box_title">
+        <div></div>
+            <div class="board_list_title" style="margin-left:180px">문제 목록</div>
+                    <div>
+                        <button class="bg_btn_style" id='b4' onclick="location.href='{%url 'sfoj_system:uploads' %}'">문제 업로드</button>
+                    </div>
+                </div>
+                <hr>
+    <table id="short_table" class="board_list_table" style="margin-top:2rem;">
+        <thead>
+        <tr class="thead-dark">
+            <th class="board_list_table_th" style="width:20%">문제번호</th>
+            <th class="board_list_table_th" style="width:50%">문제제목</th>
+            <th class="board_list_table_th" style="width:30%">작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if Board_list %}
+        {% for board in Board_list %}
+        <tr>
+            <td class="board_list_table_td">{{ forloop.counter }}</td>
+            <td class="board_list_table_td">
+                <a href="{% url 'sfoj_system:detail' board.index %}">{{ board.Title }}</a>
+            </td>
+            <td class="board_list_table_td">{{ board.Reg_date }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">질문이 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+        <hr>
+        <div class="lead" style="margin-left:auto">페이징과 문제검색 추가하기</div>
+        <br>
+        <br>
+        <br>
+
+</div>
+{% endblock %}
