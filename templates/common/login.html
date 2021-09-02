@@ -9,7 +9,7 @@
         </div>
     <div class="row">
         <div class="col-8 text-right">
-            <span class="top_info_sub">아직 회원이 아니신가요? <a href="{% url 'common:signup' %}">계정을 생성하세요.</a></span>
+            <span class="top_info_sub">아직 회원이 아니신가요? <a class="login_signup" style="font-weight:bold" href="{% url 'common:signup' %}">계정을 생성하세요.</a></span>
         </div>
     </div>
     </div>
@@ -19,7 +19,7 @@
 <div class="white_sec">
 <div class="container">
     <div class="login_box">
-    <form method="post" class="post-form" action="{% url 'common:login' %}">
+    <form method="post" action="{% url 'common:login' %}">
         {% csrf_token %}
         {% include "form_errors.html" %}
         <div class="textbox">

@@ -1,44 +1,54 @@
 {% extends 'base.html' %}
+{% load sfoj_filter %}
 {% block content %}
 {% load static %}
 <!-- 상단 꾸미기 -->
 <div class="blue_sec">
     <div class="container">
         <div style="font-size:4rem;">
-        <div class="top_info_lead">SECURITY FACTORIAL<br>
-        <span class="top_info_lead">Online Judge System</span>
+        <div class="top_info_lead">DO YOUR BEST<br>
+        <span class="top_info_lead">Solve the problems</span>
     </div>
     </div>
 </div>
 </div>
 <!-- page content -->
-<div class="board_list_my_box">
+<div class="board_list_my_box"> <!-- 가장 큰 박스 -->
     <div style="padding:2.5rem 2.5rem 0 2.5rem">
         <div class="board_list_my_box_title">
         <div></div>
-            <div class="board_list_title" style="margin-left:180px">문제 목록</div>
+            <div class="board_list_title" >문제 목록</div>
                     <div>
-                        <button class="bg_btn_style" id='b4' onclick="location.href='{%url 'sfoj_system:uploads' %}'">문제 업로드</button>
+                        <button class="bg_btn_style" style="margin-left:54rem;" onclick="location.href='{%url 'sfoj_system:uploads' %}'">문제 업로드</button>
                     </div>
                 </div>
                 <hr>
     <table id="short_table" class="board_list_table" style="margin-top:2rem;">
         <thead>
-        <tr class="thead-dark">
-            <th class="board_list_table_th" style="width:20%">문제번호</th>
+        <tr>
+            <th class="board_list_table_th" style="width:7%">번호</th>
             <th class="board_list_table_th" style="width:50%">문제제목</th>
-            <th class="board_list_table_th" style="width:30%">작성일시</th>
+            <th class="board_list_table_th" style="width:23%">작성일시</th>
+            <th class="board_list_table_th" style="width:20%">작성자</th>
         </tr>
         </thead>
-        <tbody>
-        {% if Board_list %}
-        {% for board in Board_list %}
+        <tbody class="index">
+        {% if board_list %}
+        {% for board in board_list %}
         <tr>
-            <td class="board_list_table_td">{{ forloop.counter }}</td>
+            <td class="board_list_table_td">
+                <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                <!-- board_list.paginator.count : 전체건수
+                     board_list.start_index : 시작 인덱스
+                     forloop.counter0 : 현재 인덱스 -->
+                {{ board_list.paginator.count|sub:board_list.start_index|sub:forloop.counter0|add:1 }}
+            </td>
+            <!-- /제목/작성일자/작성자  -->
             <td class="board_list_table_td">
                 <a href="{% url 'sfoj_system:detail' board.index %}">{{ board.Title }}</a>
             </td>
             <td class="board_list_table_td">{{ board.Reg_date }}</td>
+            <td class="board_list_table_td">{{ board.UserID }}</td>
         </tr>
         {% endfor %}
         {% else %}
@@ -48,11 +58,50 @@
         {% endif %}
         </tbody>
     </table>
-        <hr>
-        <div class="lead" style="margin-left:auto">페이징과 문제검색 추가하기</div>
-        <br>
-        <br>
-        <br>
+        <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if board_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ board_list.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in board_list.paginator.page_range %}
+            {% if page_number == board_list.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if board_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ board_list.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
 
+        <hr>
+        <div class="lead" style="margin-left:40%">문제검색 추가하기</div>
 </div>
+</div>
+    <br>
+        <br>
+        <br>
+        <br>
+        <br>
 {% endblock %}
