@@ -1,4 +1,5 @@
 from django.db.models.fields import NullBooleanField
+from django.db.models import Q
 from django.http.response import HttpResponseBase
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login
@@ -7,6 +8,7 @@ from .forms import BoardForm,UserForm
 from .models import *
 from django.utils import timezone
 from django.core.paginator import Paginator
+
 # main
 def index(request):
     return render(request, 'sfoj_system/index.html')
@@ -17,15 +19,28 @@ def index(request):
 def list(request):
     # parameter
     page = request.GET.get('page', '1')  # 페이지
+    kw = request.GET.get('kw', '')  # 검색어
+    so = request.GET.get('so', 'recent')  # 정렬기준
 
-    # list 조회
-    board_list = Board.objects.order_by('-Reg_date')
+    # 정렬
+    if so == 'old':
+        board_list = Board.objects.order_by('Reg_date')
+    else:  # recent
+        board_list = Board.objects.order_by('-Reg_date')
+
+    # 검색
+    if kw:
+        board_list = board_list.filter(
+            Q(Title__icontains=kw) |  # 제목검색
+            Q(Content__icontains=kw) |  # 내용검색
+            Q(UserID__username__icontains=kw)  # 문제 글쓴이검색
+        ).distinct()
 
     # 페이징 처리
     paginator = Paginator(board_list, 15)  # 한 페이지에 15개씩
     page_obj = paginator.get_page(page)
 
-    context = {'board_list': page_obj}
+    context = {'board_list': page_obj, 'page': page, 'kw': kw, 'so': so}
     return render(request, 'sfoj_system/Board_list.html', context)
 
 # 문제 상세
