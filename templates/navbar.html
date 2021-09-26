@@ -8,7 +8,7 @@
         <ul class="navbar_menu">
             <li>
                 <a class="navbar_menu" href="{% url 'sfoj_system:index' %}">home</a>
-                <a class="navbar_menu" href="#about">about</a>
+                <a class="navbar_menu" href="https://sites.google.com/d/1FmwHjb7_15XeQMd3oYBnXJvYB9_HtsCU/p/1MujXOH0Oi-tMGNoON-CtXv76fAxJHLHV/edit">about</a>
                 <a class="navbar_menu" href="{% url 'common:signup' %}">sign up</a>
                 <!-- 로그인 세션 활용 -->
                 {% if user.is_authenticated %}
@@ -19,6 +19,6 @@
             </li>
         </ul>
         <a href="#" class="navbar_toggle">
-            <i class="fas fa-bars"></i>
+            <i></i>
         </a>
     </nav>

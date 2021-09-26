@@ -1,15 +1,20 @@
 from django.contrib.auth.models import User
 from django.db import models
+"""
+models.py Ground rule
+1. 모델명은 각 단어의 첫문자를 대문자로 설정한다
+2. 각 모델의 속성은 소문자와 언더바를 활용한다
+"""
 
-# table의 모델 단, UserID가 문자열로서 사용되게 변경
 class Board(models.Model):
     index = models.AutoField(primary_key=True)
-    UserID = models.ForeignKey(User,on_delete=models.CASCADE)
-    Title = models.CharField(max_length=100)
-    Content = models.TextField()
-    #Hit = models.IntegerField(null=True)
+    user_id = models.ForeignKey(User,on_delete=models.CASCADE) #uploads 렌더링함수에서 사용
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    hit = models.IntegerField(default=0)
     #Success_per = models.IntegerField(null=True)
-    Reg_date = models.DateTimeField(null=True)
+    reg_date = models.DateTimeField(null=True)
+
 
 class Judge_State(models.Model):
     submit_idx = models.IntegerField()

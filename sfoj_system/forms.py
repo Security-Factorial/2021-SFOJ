@@ -9,11 +9,11 @@ from django.contrib.auth.models import User
 class BoardForm(forms.ModelForm):
     class Meta:
         model = Board  # 사용할 모델
-        fields = ['Title','Content']  # BoardForm에서 사용할 Board 모델의 속성
+        fields = ['title','content']  # BoardForm에서 사용할 Board 모델의 속성
 
         labels = {
-            'Title' : '제목',
-            'Content' : '내용',
+            'title' : '제목',
+            'content' : '내용',
         }
 
 class UserForm(UserCreationForm):
